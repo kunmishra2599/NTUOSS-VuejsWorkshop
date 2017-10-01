@@ -52,7 +52,7 @@ $ vue init webpack dailyjournal
 
 ```
 
-So what this command does is download a template for a single page Vue application for use in our project. We also need to install dependencies for Firebase, our backend database. Run the following commands:
+So what this command does is download a template for a single page Vue application for use in our project, in a folder called ``` dailyjournal```. We also need to install dependencies for Firebase, our backend database. Run the following commands:
 
 ```
 npm install firebase vuefire --save
@@ -64,4 +64,123 @@ N.B, the ``` --save ``` is really, really important. Now run the final command t
 npm run dev
 ```
 Your browser should now open up a new tab and show you the page below, which you can also get to at http://localhost:8080
+![task0](screenshots/task0.png?raw=true)
 
+Awesome, lets get to coding.
+
+## Task 1 - Understanding the structure of Vue.JS
+
+Before we begin, lets look at the file structure that the webpack template creates:
+```
+dailyjournal:
+    /build
+    /config
+    /node_modules
+    /src
+        /assets
+        /components
+        App.vue
+        main.js
+    static
+    index.html
+```
+You may see some other files in there, like package.json or .postcssrc.json, but you can ignore those for now. The folder we should be looking at is ```/src```. 
+
+Now, it may be intimidating to see all these files, but lets take these one at a time. inside ```/src``` we see the following:
+```
+    /src
+        /assets
+        /components
+        App.vue
+        main.js
+```
+The /assets folder wouldn't be of much use now, and you can choose to delete it, or use it to store things like images or logos. That leaves us with `/components`, `App.vue` and ```main.js```. Let's take a look at App.vue first. The webpack gives us this:
+```
+<template>
+      <div id="app">
+        <img src="./assets/logo.png">
+        <hello></hello>
+      </div>
+</template>
+
+<script>
+      import Hello from './components/Hello'
+
+      export default {
+        name: 'app',
+        components: {
+          Hello
+        }
+      }
+</script>
+
+<style>
+      #app {
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+        margin-top: 60px;
+      }
+</style>
+```
+We can see three main sections within this file, `template`, `script` and `style`. It's quite intuitive to guess that that's where the HTML, CSS and Javascript portions of our code go. The entirety of App.vue can essentially be broken down to form this:
+```
+<template>
+  ...
+</template>
+
+<script>
+  ...
+</script>
+
+<style>
+  ...
+</style>
+```
+
+## Task 1.1 - Importing Bootstrap into the Project
+
+While Vue can help us with the functionality it needs, it still needs some front-end framework to go along with it, and for that, we can use Bootstrap, which was covered in [TGIF Hacks #68](https://github.com/SuyashLakhotia/NTUOSS-BootstrapWorkshop). Navigate to `index.html`, and in the `head` portion of the html file, add these lines of code:
+```
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">
+```
+N.B, if you want to use things like Font Awesome or Google Fonts, you ought to link them in the `index.html` file, and *not* within the App.vue file.
+
+Now, navigate *back* to `App.vue` and replace *everything* in the file with the following:
+```
+<template>
+  <div id="app">
+    <div class="jumbotron">
+      <h1>My Daily Journal</h1>
+    </div>
+  </div>
+</template>
+
+<script>
+
+export default {
+  name: 'app',
+  components: {
+
+  }
+}
+</script>
+
+<style>
+
+.jumbotron{
+  text-align: center;
+  background-color: white;
+
+}
+.jumbotron h1{
+  font-family: 'Lato';
+  font-weight: 300;
+}
+
+
+</style>
+```
