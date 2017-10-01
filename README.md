@@ -56,5 +56,12 @@ So what this command does is download a template for a single page Vue applicati
 
 ```
 npm install firebase vuefire --save
+cd dailyjournal
 ```
-N.B, the --save is really, really important.
+N.B, the ``` --save ``` is really, really important. Now run the final command to start our development server:
+
+```
+npm run dev
+```
+Your browser should now open up a new tab and show you the page below, which you can also get to at http://localhost:8080
+
