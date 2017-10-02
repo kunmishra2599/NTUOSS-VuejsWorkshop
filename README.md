@@ -4,7 +4,9 @@ Today we'll be making a daily events journal in Vue.JS, a really cool emerging J
 
 Prerequisites:
   - Basic knowledge of HTML, CSS and Javascript / Node.js
+  - Latest installation of Node.js
   - Code Editor
+  - Google Account
   - Comfy clothes
 
 Things to install:
@@ -52,11 +54,11 @@ $ vue init webpack dailyjournal
 
 ```
 
-So what this command does is download a template for a single page Vue application for use in our project, in a folder called ``` dailyjournal```. We also need to install dependencies for Firebase, our backend database. Run the following commands:
+So what this command does is download a template for a single page Vue application for use in our project, in a folder called ``` dailyjournal```. We also need to install dependencies for Firebase, our backend database. This'll come in handy later on. Run the following commands:
 
 ```
-npm install firebase vuefire --save
 cd dailyjournal
+npm install firebase vuefire --save
 ```
 N.B, the ``` --save ``` is really, really important. Now run the final command to start our development server:
 
@@ -65,8 +67,53 @@ npm run dev
 ```
 Your browser should now open up a new tab and show you the page below, which you can also get to at http://localhost:8080
 ![task0](screenshots/task0.png?raw=true)
+### Setting up Firebase
 
-Awesome, lets get to coding.
+This is a good time to get our Firebase database set up as well. Before we get to that, let's understand what exactly Firebase is.
+Firebase is essentially a console where you can control your entire app, wherever it is (Android, iOS, Web, wherever). The core of firebase is a JSON database, where things are stored and can be accessed if you have the config files.
+
+While Firebase has lots of cool things like Authentication and Crash testing, we're going to focus on the central database. 
+#### Step 1: Sign in with your Google Account
+
+Open your browser and navigate to https://firebase.google.com/. Click on the link that says GO TO CONSOLE.
+Follow the instructions and sign in with your Google / Gmail Account
+#### Step 2: Creating a new project
+
+Once you've done this, you'll be redirected to a page where you can create your own Project. Click on the big square that says Add Project. The page should look like how it does below (Don't worry about the project ID for now)
+
+![task0step2](screenshots/task0step2.png?raw=true)
+
+#### Step 3: Adding entries to the Database
+
+Once you've created the project, you'll see a page which looks like this:
+
+![task0step3_1](screenshots/task0step3_1.png?raw=true)
+
+Navigate to Database, and click on the side menu and select upload JSON.
+
+![task0step3_2](screenshots/task0step3_2.png?raw=true)
+
+I've prepared a starting database for you guys to work with which you can upload. Upload the file called `entries.json` to Firebase.
+Once you've uploaded, you'll be greeted with this sight
+![task0step3_3](screenshots/task0step3_3.png?raw=true)
+
+#### Step 4: Changing the database rules
+
+The last thing we need to do to configure the database is to change the read/write rules. First, click on the Rules tab in the Database part of the console. You'll see this screen.
+![task0step3_4](screenshots/task0step3_4.png?raw=true)
+
+Edit the rules to make them this:
+```
+ {
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+ }
+```
+Now read and write database access is possible without authentication.
+
+Awesome, lets get to coding. Also, keep this tab open. We'll need it later on.
 
 ## Task 1 - Understanding the structure of Vue.JS
 
@@ -184,3 +231,16 @@ export default {
 
 </style>
 ```
+Go back to your browser, your screen should now look like this:
+
+![task1.1](screenshots/task1.1.png?raw=true)
+
+*N.B, if you're really lost, you can try downloading the folder marked `lost_send_nodes` and it'll have everything set up until task 1.1.*
+
+In order to use it, you'll need to run the following commands once you've navigated to the directory
+```
+npm install
+npm run dev
+```
+
+
