@@ -57,8 +57,8 @@ $ vue init webpack dailyjournal
 So what this command does is download a template for a single page Vue application for use in our project, in a folder called ``` dailyjournal```. We also need to install dependencies for Firebase, our backend database. This'll come in handy later on. Run the following commands:
 
 ```
-npm install firebase vuefire --save
 cd dailyjournal
+npm install firebase vuefire --save
 ```
 N.B, the ``` --save ``` is really, really important. Now run the final command to start our development server:
 
