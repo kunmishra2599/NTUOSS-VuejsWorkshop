@@ -115,7 +115,7 @@ Now read and write database access is possible without authentication.
 
 Awesome, lets get to coding. Also, keep this tab open. We'll need it later on.
 
-## Task 1 - Understanding the structure of Vue.JS
+## Task 1 - Getting to know Vue and Integrating with Firebase
 
 Before we begin, lets look at the file structure that the webpack template creates:
 ```
@@ -242,5 +242,51 @@ In order to use it, you'll need to run the following commands once you've naviga
 npm install
 npm run dev
 ```
+## Task 1.2 - Integrating with Firebase
 
+Now that we have this set up, lets add firebase to our app (Better keep that tab open guys).
+Open the file `main.js`, and replace *everything* with the following lines of code:
+```
+import Vue from 'vue'
+import VueFire from 'vuefire'
+
+
+import App from './App'
+
+Vue.use(VueFire)
+
+new Vue({
+  el: '#app',
+  template: '<App/>',
+  components: { App }
+})
+```
+Let's take this step by step. The first line imports the main Vue module. The second is new, it imports VueFire, which was the module we installed earlier. The third imports a component from the file `App.vue`. The fourth makes the library `VueFire` available for use in our project, and the other lines just create a new Vue component.
+
+Next, lets move back to `App.vue`, and add the following lines of code inside the `script` section of the file.
+```
+import Firebase from 'firebase'
+
+let config = {
+    apiKey: "...",
+    authDomain: "...",
+    databaseURL: "...",
+    storageBucket: "...",
+    messagingSenderId: "..."
+  };
+  
+let app = Firebase.initializeApp(config)
+let db = app.database()
+
+let entryRef = db.ref('entries')
+```
+Ah, now this is interesting. Before we move any further, lets move back to the tab with our firebase console in the browser. Navigate back to the homepage by clicking on Overview, and click the last, red(or purple? idk?) circle, that lets us add Firebase to our Web App
+
+![task1.2_1](screenshots/task1.2_1.png?raw=true)
+
+Once you click on the button, you'll see the following screen. 
+
+![task1.2_2](screenshots/task1.2_2.png?raw=true)
+
+Do some of these variables look familiar? Copy them into the corresponding variables in the config portion in `App.vue`. Take 5.
 
