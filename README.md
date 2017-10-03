@@ -187,7 +187,7 @@ We can see three main sections within this file, `template`, `script` and `style
 </style>
 ```
 
-## Task 1.1 - Importing Bootstrap into the Project
+### Task 1.1 - Importing Bootstrap into the Project
 
 While Vue can help us with the functionality it needs, it still needs some front-end framework to go along with it, and for that, we can use Bootstrap, which was covered in [TGIF Hacks #68](https://github.com/SuyashLakhotia/NTUOSS-BootstrapWorkshop). Navigate to `index.html`, and in the `head` portion of the html file, add these lines of code:
 ```
@@ -242,7 +242,7 @@ In order to use it, you'll need to run the following commands once you've naviga
 npm install
 npm run dev
 ```
-## Task 1.2 - Integrating with Firebase
+### Task 1.2 - Integrating with Firebase
 
 Now that we have this set up, lets add firebase to our app (Better keep that tab open guys).
 Open the file `main.js`, and replace *everything* with the following lines of code:
