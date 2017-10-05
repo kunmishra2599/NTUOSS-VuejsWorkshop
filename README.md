@@ -444,7 +444,206 @@ methods: {
       this.newEntry.title = ''
       this.newEntry.content = ''
       this.newEntry.date = ''
+      location.reload()
     }
   },
 ```
 Now, when we add a new entry, it'll appear on the top of the other entries. Go ahead, try it out.
+By now, your code should look like this:
+```
+<template>
+  <div id="app">
+    <div class="jumbotron">
+      <h1>My Daily Journal</h1>
+    </div>
+    <div class="container">
+      <div class="card" style="width:100%;">
+      <div class="card-heading">
+        <h3 class="card-title" style="margin:20px; text-align:center; font-family:'Lato';">New Entry</h3>
+      </div>
+      <div class="card-body">
+        <form id="form"  v-on:submit.prevent="addEntry">
+          <div class="row">
+            <div class="col">
+              <label for="entryTitle">Title:</label>
+              <input type="text" id="entryTitle" class="form-control" v-model="newEntry.title">
+            </div>
+            <div class="col">
+              <label for="entryDate">Date:</label>
+              <input type="text" id="entryDate" class="form-control" v-model="newEntry.date" >
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:20px;">
+            <label for="entryContent">Content:</label>
+            <textarea type="text" id="entryContent" class="form-control" v-model="newEntry.content" ></textarea>
+          </div>
+          <input type="submit" class="btn btn-primary" value="Add Entry">
+        </form>
+      </div>
+    </div>
+    <div v-for="entry in reversedentries" class="card text-center" style="margin:30px;">
+        <div class="card-header">
+          Journal Entry
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">{{entry.title}}</h4>
+          <p class="card-text">{{entry.content}}</p>
+        </div>
+        <div class="card-footer text-muted">
+          {{entry.date}}
+        </div>
+
+    </div>
+  </div>
+</div>
+
+</template>
+
+<script>
+import Firebase from 'firebase'
+
+let config = {
+  apiKey: '',
+  authDomain: '',
+  databaseURL: '',
+  storageBucket: '',
+  messagingSenderId: ''
+}
+
+let app = Firebase.initializeApp(config)
+let db = app.database()
+
+let entryRef = db.ref('entries')
+
+export default {
+  name: 'app',
+  firebase: {
+    entries: entryRef
+  },
+
+  data () {
+    return {
+      newEntry: {
+        title: '',
+        content: '',
+        date: ''
+      }
+    }
+  },
+  methods: {
+    addEntry: function () {
+      entryRef.push(this.newEntry)
+      this.newEntry.title = ''
+      this.newEntry.content = ''
+      this.newEntry.date = ''
+      location.reload()
+    }
+  },
+  computed: {
+    reversedentries: function () {
+      return this.entries.reverse()
+    }
+  },
+  components: {
+
+  }
+}
+
+</script>
+
+<style>
+
+.jumbotron{
+  text-align: center;
+  background-color: white;
+
+}
+.jumbotron h1{
+  font-family: 'Lato';
+  font-weight: 300;
+}
+
+
+</style>
+```
+Let's move on to the last part.
+
+### Task 2.3 - Implementing a Delete button
+
+With our journal, we'd also want to be able to delete posts at will. We can follow the same `method` way of defining a function in Vue. Let's start by adding an icon to each card. We'll use Font Awesome for this. Add the following link to the `<head>` portion of the `index.html` file:
+```
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+```
+Now, move back to `App.vue` and add the following line of code to the card title:
+```
+<button v-on:click="removeEntry(entry)" ><i class="fa fa-trash-o" aria-hidden="true" ></i></button>
+```
+Your card should now look like this:
+```
+<div v-for="entry in reversedentries" class="card text-center" style="margin:30px;">
+        <div class="card-header">
+          Journal Entry
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">{{entry.title}} <button v-on:click="removeEntry(entry)" ><i class="fa fa-trash-o" aria-hidden="true" ></i></button></h4>
+          <p class="card-text">{{entry.content}}</p>
+        </div>
+        <div class="card-footer text-muted">
+          {{entry.date}}
+        </div>
+
+    </div>
+```
+Once this is done, let's define a method called `removeEntry` in methods, in the script section. Use the following code:
+```
+    removeEntry: function (entry) {
+      entryRef.child(entry['.key']).remove()
+    }
+```
+Your methods section should now look like this:
+```
+  methods: {
+    addEntry: function () {
+      entryRef.push(this.newEntry)
+      this.newEntry.title = ''
+      this.newEntry.content = ''
+      this.newEntry.date = ''
+      location.reload()
+    },
+    removeEntry: function (entry) {
+      entryRef.child(entry['.key']).remove()
+    }
+  },
+```
+
+Yay! We can now add *and* delete things from the Firebase library from our end! Let's move to the last part of our tutorial, hosting the journal on firebase's server
+
+## Task 3 - Hosting on Firebase
+
+Firebase also provides really good hosting services. They let you start off on a free plan which covers alot of stuff, and give you the option to upgrade to better plans when the time comes, so do check those out as well.
+
+### Task 3.1 - Creating a distribution build and installing firebase-tools
+
+We've now created a build version of our app which we can upload to firebase hosting. Lets first install firebase tools on our console. Enter the following command in the terminal
+
+```
+npm install -g firebase-tools
+```
+This might take a while depending on the internet connection, so bear with it for a while.
+
+Once it's done, run the following command:
+```
+firebase init
+```
+You'll see some cool text animation and stuff. 
+
+Node allows us to package our builds and run them on a HTTP server such as one on Firebase. Exit the loop using CTRL+C or Command+C and enter the following command in the terminal
+```
+npm run build
+```
+When completed, the terminal will show 'Build Complete'. 
+Enter one final command and let's take it home
+```
+firebase deploy
+```
+And the page is live! Look for the link in the terminal and visit it in your browser!
