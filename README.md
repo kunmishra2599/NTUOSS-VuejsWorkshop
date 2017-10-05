@@ -189,10 +189,13 @@ We can see three main sections within this file, `template`, `script` and `style
 
 ### Task 1.1 - Importing Bootstrap into the Project
 
-While Vue can help us with the functionality it needs, it still needs some front-end framework to go along with it, and for that, we can use Bootstrap, which was covered in [TGIF Hacks #68](https://github.com/SuyashLakhotia/NTUOSS-BootstrapWorkshop). Navigate to `index.html`, and in the `head` portion of the html file, add these lines of code:
+While Vue can help us with the functionality it needs, it still needs some front-end framework to go along with it, and for that, we can use Bootstrap 4, which was covered in [TGIF Hacks #68](https://github.com/SuyashLakhotia/NTUOSS-BootstrapWorkshop). Navigate to `index.html`, and in the `head` portion of the html file, add these lines of code:
 ```
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
 ```
 N.B, if you want to use things like Font Awesome or Google Fonts, you ought to link them in the `index.html` file, and *not* within the App.vue file.
 
@@ -247,34 +250,35 @@ npm run dev
 Now that we have this set up, lets add firebase to our app (Better keep that tab open guys).
 Open the file `main.js`, and replace *everything* with the following lines of code:
 ```
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import VueFire from 'vuefire'
-
-
 import App from './App'
+import VueFire from 'vuefire'
+Vue.config.productionTip = false
 
 Vue.use(VueFire)
-
+/* eslint-disable no-new */
 new Vue({
   el: '#app',
   template: '<App/>',
   components: { App }
 })
+
 ```
-Let's take this step by step. The first line imports the main Vue module. The second is new, it imports VueFire, which was the module we installed earlier. The third imports a component from the file `App.vue`. The fourth makes the library `VueFire` available for use in our project, and the other lines just create a new Vue component.
 
 Next, lets move back to `App.vue`, and add the following lines of code inside the `script` section of the file.
 ```
 import Firebase from 'firebase'
 
 let config = {
-    apiKey: "...",
-    authDomain: "...",
-    databaseURL: "...",
-    storageBucket: "...",
-    messagingSenderId: "..."
-  };
-  
+  apiKey: '...',
+  authDomain: '...',
+  databaseURL: '...',
+  storageBucket: '...',
+  messagingSenderId: '...'
+}
+
 let app = Firebase.initializeApp(config)
 let db = app.database()
 
@@ -289,4 +293,158 @@ Once you click on the button, you'll see the following screen.
 ![task1.2_2](screenshots/task1.2_2.png?raw=true)
 
 Do some of these variables look familiar? Copy them into the corresponding variables in the config portion in `App.vue`. Take 5.
+Lastly, edit the ```export default { ...} ``` portion of the script, and add this line of code:
+```
+firebase: {
+    entries: entryRef
+  },
+```
+The ```export``` portion should now look like this:
 
+```
+export default {
+  name: 'app',
+  firebase: {
+    entries: entryRef
+  },
+  computed: {
+    reversedentries: function () {
+      return this.entries.reverse()
+    }
+  },
+  components: {
+
+  }
+}
+```
+Awesome, lets move on to see how we can call the Firebase Realtime Database
+
+## Task 2 - Using Firebase for real
+
+### Task 2.1 - Displaying the Data
+
+We'll be displaying the data in the form of cards, which will be dynamically generated for each entry in the 'journal'. Vue makes it easy for us by allowing us to loop over entries using the `v-for` method. `v-for` is an example of a Vue directive, and another example of that is `v-model`, which we'll be using later. More on this [here](https://vuejs.org/v2/guide/list.html).
+We can use Bootstrap 4's cards, which have the following code structure:
+```
+<div class="card text-center">
+  <div class="card-header">
+    Entry
+  </div>
+  <div class="card-body">
+    <h4 class="card-title">Title of Card</h4>
+    <p class="card-text">Some text here</p>
+  </div>
+  <div class="card-footer text-muted">
+    Date
+  </div>
+</div>
+```
+
+We can add the v-for method in this way:
+```
+<div class="container">
+    <div v-for="entry in reversedentries" class="card text-center" style="margin:30px;">
+        <div class="card-header">
+          Journal Entry
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">{{entry.title}}</h4>
+          <p class="card-text">{{entry.content}}</p>
+        </div>
+        <div class="card-footer text-muted">
+          {{entry.date}}
+        </div>
+    </div>
+  </div>
+  ```
+Add this code to the template section of the `App.vue` file, and if all goes well, you should see this:
+  
+![task_2.1_1](screenshots/task_2.1_1.png?raw=true)
+
+Yay! We've just pulled stuff from the Firebase Realtime database. This means your VueJS app is now linked to your firebase account, and we can get cool stuff happening now.
+
+### Task 2.2 - Adding to the Realtime Database
+
+Now that we can display data from the database, we can get to adding stuff to it. After all, what good is a daily journal when you can't add to it, right?
+First, let's create some empty variables as a data model in the ```export``` part of the script. Add the following code to ```export```:
+```
+data () {
+    return {
+      newEntry: {
+          title: '',
+          content: '',
+          date: ''
+      }
+    }
+  },
+```
+
+The export should now look like this:
+```
+export default {
+  name: 'app',
+  firebase: {
+    entries: entryRef
+  },
+
+  data () {
+    return {
+      newEntry: {
+        title: '',
+        content: '',
+        date: ''
+      }
+    }
+  },
+  computed: {
+    reversedentries: function () {
+      return this.entries.reverse()
+    }
+  },
+  components: {
+
+  }
+}
+```
+Next, let's create a form group in the template portion, to be put before the `v-for` code. Lol, it's be-for the `v-for`. Anyway, we'll be using another vue directive called `v-model`. We use v-model in this way:
+```
+<div class="card" style="width:100%;">
+      <div class="card-heading">
+        <h3 class="card-title" style="margin:20px; text-align:center; font-family:'Lato';">New Entry</h3>
+      </div>
+      <div class="card-body">
+        <form id="form"  v-on:submit.prevent="addEntry">
+          <div class="row">
+            <div class="col">
+              <label for="entryTitle">Title:</label>
+              <input type="text" id="entryTitle" class="form-control" v-model="newEntry.title">
+            </div>
+            <div class="col">
+              <label for="entryDate">Date:</label>
+              <input type="text" id="entryDate" class="form-control" v-model="newEntry.date" >
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:20px;">
+            <label for="entryContent">Content:</label>
+            <textarea type="text" id="entryContent" class="form-control" v-model="newEntry.content" ></textarea>
+          </div>
+          <input type="submit" class="btn btn-primary" value="Add Entry">
+        </form>
+      </div>
+    </div>
+```
+Add the code above inside the `containter` div tag. If done correctly, your screen should look like this:
+![task2.2_1](screenshots/task2.2_1.png?raw=true)
+
+Basically, we've used the input as the model for the variables we created earlier in the data model. Now that we've created methods to save the data in the model, we need to push it to the database using a method. Once again, in the `export` section, add the following lines of code:
+```
+methods: {
+    addEntry: function () {
+      entryRef.push(this.newEntry)
+      this.newEntry.title = ''
+      this.newEntry.content = ''
+      this.newEntry.date = ''
+    }
+  },
+```
+Now, when we add a new entry, it'll appear on the top of the other entries. Go ahead, try it out.
