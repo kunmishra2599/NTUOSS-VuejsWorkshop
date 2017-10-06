@@ -635,7 +635,7 @@ Once it's done, run the following command:
 ```
 firebase init
 ```
-You'll see some cool text animation and stuff. 
+You'll see some cool text animation and stuff. Select Yes and click enter. Next, elect Database and Hosting using the spacebar and click enter to move on. Using the arrow keys, select the project we created earlier and click enter twice. When it asks you for the public directory, type 'dist' and enter. 
 
 Node allows us to package our builds and run them on a HTTP server such as one on Firebase. Exit the loop using CTRL+C or Command+C and enter the following command in the terminal
 ```
