@@ -622,7 +622,6 @@ Yay! We can now add *and* delete things from the Firebase library from our end! 
 
 Firebase also provides really good hosting services. They let you start off on a free plan which covers alot of stuff, and give you the option to upgrade to better plans when the time comes, so do check those out as well.
 
-### Task 3.1 - Creating a distribution build and installing firebase-tools
 
 We've now created a build version of our app which we can upload to firebase hosting. Lets first install firebase tools on our console. Enter the following command in the terminal
 
