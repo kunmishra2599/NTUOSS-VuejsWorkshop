@@ -646,3 +646,6 @@ Enter one final command and let's take it home
 firebase deploy
 ```
 And the page is live! Look for the link in the terminal and visit it in your browser!
+N.B, if you can't see any posts, make sure your database rules are set to `true` (Covered in Task 0).
+
+
