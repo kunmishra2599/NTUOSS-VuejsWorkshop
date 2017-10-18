@@ -650,3 +650,6 @@ And the page is live! Look for the link in the terminal and visit it in your bro
 N.B, if you can't see any posts, make sure your database rules are set to `true` (Covered in Task 0).
 
 
+## Credits
+Special thanks to my boi, Shiv Alagar, for testing out the workshop, and NTUOSS for letting me give this talk in the first place. Cheers!
+Wubba Lubba Dub Dub!
