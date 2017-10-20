@@ -294,10 +294,16 @@ Once you click on the button, you'll see the following screen.
 ![task1.2_2](screenshots/task1.2_2.png?raw=true)
 
 Do some of these variables look familiar? Copy them into the corresponding variables in the config portion in `App.vue`. Take 5.
-Lastly, edit the ```export default { ...} ``` portion of the script, and add this line of code:
+Lastly, edit the ```export default { ...} ``` portion of the script, and add the following lines of code:
 ```
+
 firebase: {
     entries: entryRef
+  },
+  computed: {
+    reversedentries: function () {
+      return this.entries.reverse()
+    }
   },
 ```
 The ```export``` portion should now look like this:
